@@ -20,10 +20,11 @@ def main(args):
     fps = cap.get(cv2.CAP_PROP_FPS) or 30
     delay = 1.0 / fps
 
-    tracker = DeepSort(max_age=10,
-                       n_init=7,
+    tracker = DeepSort(max_age=40,
+                       n_init=6,
                        max_cosine_distance=0.5,
-                       nn_budget=None)
+                       max_iou_distance=0.5,
+                       nn_budget=100)
 
     out = None
     i = 0
@@ -33,14 +34,10 @@ def main(args):
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
         out = cv2.VideoWriter(args.output, fourcc, fps, (width, height))
 
+    begin_time = time.time()
     while True:
-        begin_time = time.time()
         start_time = time.time()
         ret, frame = cap.read()
-        if i % 30 == 0:
-            end_time = time.time() - begin_time
-            print(f"Processing {i} frames took {end_time:.2f} seconds")
-            begin_time = time.time()
         i += 1
         if not ret:
             break
@@ -56,7 +53,7 @@ def main(args):
             if (
                 cls in [1, 2, 3] and  # goalkeeper, player, referee
                 score >= args.conf and
-                area >= 800
+                area >= 400
             ):
                 detections.append(([x1, y1, w, h], score, cls))
 
@@ -68,16 +65,19 @@ def main(args):
             ltrb = track.to_ltrb()
             x1, y1, x2, y2 = map(int, ltrb)
             cls = track.det_class
-            conf = track.det_conf
             label = model.names.get(cls, 'unknown')
 
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            cv2.putText(frame, f"ID {track_id}: {label} Conf: {conf:.2f}", (x1, y1 - 10),
+            cv2.putText(frame, f"ID {track_id}: {label}", (x1, y1 - 10),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
 
+        if i % 30 == 0:
+            end_time = time.time() - begin_time
+            print(f"Processing {i} frames took {end_time:.2f} seconds")
+            begin_time = time.time()
         if out is not None:
             out.write(frame)
-            if i == 120: break
+            if i > 120: break # For debugging, processing only 4 seconds of the video
         else:
             cv2.imshow("Frame", frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
