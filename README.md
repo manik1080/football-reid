@@ -34,7 +34,7 @@ python main.py --video videos/15sec_input_720p.mp4 --model models/best.pt
   - Supports stride-based processing for summary videos.
   - Can record a summary or display in real-time, depending on arguments.
 
-### **model_test.py**
+**model_test.py**
 - (Optional) Script for testing the YOLO model independently.
 - **Functioning**:  
   - Allows for quick evaluation of detection performance on sample frames or videos.
