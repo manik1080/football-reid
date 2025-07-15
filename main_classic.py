@@ -49,8 +49,7 @@ def main(args):
             area = w * h
             if (
                 cls in [1, 2, 3] and  # goalkeeper, player, referee
-                score >= args.conf and
-                area >= 800
+                score >= args.conf
             ):
                 detections.append([x1, y1, x2, y2, score, cls])
         detections = np.array(detections)
@@ -66,7 +65,7 @@ def main(args):
 
         if out is not None:
             out.write(frame)
-            if i == 120: break
+            if i == fps*(args.duration//1): break
         else:
             cv2.imshow("Frame", frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -97,5 +96,9 @@ if __name__ == '__main__':
                         help='Confidence threshold')
     parser.add_argument('--output', type=str, default=None,
                         help='Path to output video file')
+    parser.add_argument('--duration', type=float, default=0,
+                        help='If output, duration of video to output')
+    parser.add_argument('--verbose', type=bool, default=False,
+                        help='Verbosity')
     args = parser.parse_args()
     main(args)
