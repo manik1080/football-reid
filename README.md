@@ -55,9 +55,6 @@ python main.py --video videos/15sec_input_720p.mp4 --model models/best.pt
 **videos/**
 - Stores input videos to be processed.
 
-**requirements.txt**
-- Lists all Python dependencies required to run the project.
-
 ---
 
 ## Usage
