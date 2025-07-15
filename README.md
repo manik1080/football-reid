@@ -1,7 +1,5 @@
-
+# Football Player Re-Identification
 ---
-
-## File Descriptions
 
 ### **main.py**
 - Main script for detection and tracking using YOLO and DeepSORT.
