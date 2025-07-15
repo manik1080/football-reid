@@ -2,7 +2,7 @@
 ---
 ## Quick Start:
 
-replace models/best.pt with your model path
+Complete useage instructions with args discussed below. Here, replace models/best.pt with your model path.
 **Real-time display with multi-threading for faster video loading:**
 ```sh
 python main_threaded.py --video videos/15sec_input_720p.mp4 --model models/best.pt
@@ -12,6 +12,7 @@ python main_threaded.py --video videos/15sec_input_720p.mp4 --model models/best.
 python main.py --video videos/15sec_input_720p.mp4 --model models/best.pt
 ```
 
+## File Structure:
 **main.py**
 - Main script for detection and tracking using YOLO and DeepSORT.
 - **Functioning**:  
